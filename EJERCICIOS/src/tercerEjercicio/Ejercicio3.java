@@ -24,7 +24,7 @@ public class Ejercicio3
 		
 		for (String palabra : palabras) 
 		{
-			if (palabra.equals(ultimaPalabra)) 
+			if (palabra.equalsIgnoreCase(ultimaPalabra)) 
 			{
 				palabraYaIngresada = true;
 			}
