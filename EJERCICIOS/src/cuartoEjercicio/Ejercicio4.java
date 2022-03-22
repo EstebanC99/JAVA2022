@@ -1,5 +1,6 @@
 package cuartoEjercicio;
 
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Ejercicio4 
@@ -8,54 +9,45 @@ public class Ejercicio4
 	public static void main(String[] args) 
 	{
 		Scanner lector = new Scanner(System.in);
-		Integer[] numeros = new Integer[5];
 		
+		System.out.println("Ingrese el número limitador: ");
 		
-		int numeroBarrera = ingresarNumerosYDevolverLimite(lector, numeros);
+		Integer numeroLimite = Integer.parseInt(lector.nextLine());
 		
-		Integer[] numerosMayores = obtenerNumerosMayores(numeros, numeroBarrera);
+		System.out.println();System.out.println();
 		
-		System.out.println("Los numeros mayores son:");
+		ArrayList<Integer> numeros = new ArrayList<Integer>();
 		
-		for (Integer numero : numerosMayores) 
+		for (int i = 0; i < 5; i++) 
 		{
-			if (numero != null) 
-			{
-				System.out.println(numero);
-			}
+			System.out.println("Ingrese un número para la posición " + (i + 1) + ": ");
+			numeros.add(Integer.parseInt(lector.nextLine()));
 		}
-
-	}
-
-	private static Integer[] obtenerNumerosMayores(Integer[] numeros, int numeroBarrera) 
-	{
-		Integer[] numerosMayores = new Integer[5];
-		int i = 0;
 		
-		for (Integer numero: numeros) 
-		{
-			if (numero > numeroBarrera) 
-			{
-				numerosMayores[i] = numero;
-				i++;
-			}
-		}
-		return numerosMayores;
-	}
-
-	private static int ingresarNumerosYDevolverLimite(Scanner lector, Integer[] numeros) 
-	{
-		System.out.println("Ingrese el numero entero de barrera:");
-		int numeroBarrera = Integer.parseInt(lector.nextLine());
+		System.out.println();System.out.println();
 		
-		for (int i = 0; i < numeros.length; i++) 
-		{
-			System.out.println("Ingrese el número [" + (i + 1) +"]: ");
-			numeros[i] = Integer.parseInt(lector.nextLine());
-		}
+		System.out.println("Los números mayores son: ");
+		System.out.println(obtenerNumerosMayores(numeros, numeroLimite));
 		
 		lector.close();
-		return numeroBarrera;
+		
+	}
+	
+	private static ArrayList<Integer> obtenerNumerosMayores(ArrayList<Integer> numeros, Integer numeroLimite)
+	{
+		ArrayList<Integer> numerosMenores = new ArrayList<Integer>();
+		
+		for (Integer numero : numeros) 
+		{
+			if (numero <= numeroLimite) 
+			{
+				numerosMenores.add(numero);
+			}
+		}
+		
+		numeros.removeAll(numerosMenores);
+		
+		return numeros;
 	}
 
 }

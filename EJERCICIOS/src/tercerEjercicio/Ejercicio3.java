@@ -1,5 +1,6 @@
 package tercerEjercicio;
 
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Ejercicio3 
@@ -7,34 +8,24 @@ public class Ejercicio3
 
 	public static void main(String[] args) 
 	{
-		String[] palabras = new String[10];
+		
+		ArrayList<String> palabras = new ArrayList<String>();
 		
 		Scanner lector = new Scanner(System.in);
 		
-		for (int i = 0; i < palabras.length; i++) 
+		for (int i = 0; i < 10; i++) 
 		{
-			System.out.println("Ingrese la palabra " + (i+1) + ": ");
-			palabras[i] = lector.nextLine();
+			System.out.println("Ingrese la palabra " + (i+1) +  ": ");
+			palabras.add(lector.nextLine());
 		}
 		
-		System.out.println("");
-		System.out.println("Ingrese una palabra mas: ");
-		String ultimaPalabra = lector.nextLine();
-		Boolean palabraYaIngresada = false;
+		System.out.println("Ingrese palabra de prueba: ");
 		
-		for (String palabra : palabras) 
+		if (palabras.contains(lector.nextLine())) 
 		{
-			if (palabra.equalsIgnoreCase(ultimaPalabra)) 
-			{
-				palabraYaIngresada = true;
-			}
-		}
-		
-		if (palabraYaIngresada) 
-		{
-			System.out.println("La palabra ya se había ingresado.");
+			System.out.println("La palabra ya fue ingresada.");
 		} else {
-			System.out.println("La palabra no se había ingresado.");
+			System.out.println("La palabra no se ingresó.");
 		}
 		
 		lector.close();
