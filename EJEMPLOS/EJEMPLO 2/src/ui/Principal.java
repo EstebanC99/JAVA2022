@@ -1,7 +1,5 @@
 package ui;
 
-import javax.swing.plaf.synth.SynthOptionPaneUI;
-
 import entidades.Alumno;
 import entidades.Persona;
 
