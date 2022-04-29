@@ -52,8 +52,8 @@ public class Producto {
 	
 	@Override
 	public String toString() {
-		String mensaje = "Producto %i : %s, %s, Precio: $%d, Cantidad en stock: %i unidades, %s.";
-		return String.format(mensaje, this.ID, this.Nombre, this.Descripcion, this.Precio, this.Stock, this.EvaluarEnvio());
+		String mensaje = "Producto " + this.ID + ": " + this.Nombre + ", " + this.Descripcion + ", Precio: $" + this.Precio +", Cantidad en stock: "+ this.Stock + " unidades, " + this.EvaluarEnvio() + ".";
+		return mensaje;
 	}
 	
 }
