@@ -87,6 +87,7 @@ public class ProductoData extends EntityData<Producto> {
 			this.rs = this.stmt.getGeneratedKeys();
 			
 			if (this.rs != null && this.rs.next()) {
+				this.entity = nuevoProducto;
 				this.entity.setID(this.rs.getInt(1));
 			}
 		}
@@ -101,7 +102,7 @@ public class ProductoData extends EntityData<Producto> {
 	public void modify(Producto productoModificado) {
 		
 		try {
-			this.getStmt("UPDATE " + this.tableName + "SET Nombre =?, Descripcion =?, Precio =?, Stock =?, EnvioIncluido =? WHERE ID_Producto =?");
+			this.getStmt("UPDATE " + this.tableName + " SET Nombre =?, Descripcion =?, Precio =?, Stock =?, EnvioIncluido =? WHERE ID_Producto =?");
 			this.stmt.setString(1, productoModificado.getNombre());
 			this.stmt.setString(2, productoModificado.getDescripcion());
 			this.stmt.setDouble(3, productoModificado.getPrecio());

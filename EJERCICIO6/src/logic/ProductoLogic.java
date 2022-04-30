@@ -34,7 +34,12 @@ public class ProductoLogic {
 		if (!validaciones.isEmpty()){
 			System.out.print(validaciones);
 		} else {
-			this.data.add(nuevoProducto);
+			try {
+				this.data.add(nuevoProducto);
+			}
+			catch (Exception ex) {
+				ex.printStackTrace();
+			}
 		}
 	}
 	
