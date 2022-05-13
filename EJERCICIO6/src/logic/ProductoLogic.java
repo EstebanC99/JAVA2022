@@ -1,5 +1,8 @@
 package logic;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.LinkedList;
 import data.ProductoData;
 import entities.Producto;
@@ -63,6 +66,15 @@ public class ProductoLogic {
 		}
 		
 		this.data.remove(id);
+	}
+	
+	public void desactivar(Producto productoDesactivado) {
+		
+		productoDesactivado.setDisabledOn(LocalDateTime.now());
+		productoDesactivado.setDisabledDate(LocalDate.now());
+		productoDesactivado.setDisabledTime(LocalTime.of(productoDesactivado.getDisabledOn().getHour(), productoDesactivado.getDisabledOn().getMinute(), productoDesactivado.getDisabledOn().getSecond()));
+		
+		this.data.desactivarProducto(productoDesactivado);
 	}
 	
 	private String validarProducto(Producto nuevoProducto) {

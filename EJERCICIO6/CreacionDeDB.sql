@@ -20,6 +20,8 @@ INSERT INTO t_Producto VALUES
 (2, 'Arroz', 'Legumbres integrales', 80.00, 2, 0),
 (3, 'Papas', 'Snack frito', 200.00, 10, 1);
 
+DROP USEr java@'%';
+
 create user java@'%' identified by 'user1';
 
 grant select, insert, update, delete on javamarket.* to java@'%';

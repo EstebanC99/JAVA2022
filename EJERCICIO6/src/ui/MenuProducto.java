@@ -29,6 +29,7 @@ public class MenuProducto {
 			System.out.println("(3) -> Agregar un nuevo producto");
 			System.out.println("(4) -> Modificar un producto");
 			System.out.println("(5) -> Eliminar un producto");
+			System.out.println("(6) -> Desactivar un producto");
 			System.out.println("(0) -> Salir");
 			
 			System.out.println("Elija una opcion del menú:");
@@ -52,6 +53,9 @@ public class MenuProducto {
 					break;
 				case 5:
 					this.menuBaja();
+					break;
+				case 6:
+					this.menuDesactivar();
 					break;
 				case 0:
 					salir = true;
@@ -226,6 +230,41 @@ public class MenuProducto {
 			System.out.println(prod.toString());
 		}
 		
+		System.out.print("ENTER para continuar....");
+		this.scanner.nextLine();
+	}
+
+	private void menuDesactivar() {
+		
+this.clearConsole();
+		
+		for (Producto prod : this.logic.obtenerTodos()) {
+			
+			System.out.println(prod.toString());
+		}
+		
+		System.out.println();
+		System.out.println("INGRESE ID DE PRODUCTO A ELIMINAR:");
+		Producto producto = this.logic.obtenerPorID(Integer.parseInt(this.scanner.nextLine()));
+		
+		this.clearConsole();
+		
+		System.out.println(producto.toString());
+		System.out.println();
+		
+		System.out.println("¿Seguro de eliminar? (true o false)");
+		Boolean respuesta = Boolean.parseBoolean(this.scanner.nextLine());
+		
+		if (respuesta) {
+			this.logic.desactivar(producto);
+		}
+		else
+		{
+			System.out.println("Desactivacion cancelada");
+		}
+		
+		System.out.println(producto.toString());
+		System.out.println();
 		System.out.print("ENTER para continuar....");
 		this.scanner.nextLine();
 	}

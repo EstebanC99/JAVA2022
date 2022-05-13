@@ -3,6 +3,7 @@ package data;
 import java.sql.*;
 import java.util.LinkedList;
 import entities.Producto;
+import java.time.*;
 
 
 
@@ -18,7 +19,7 @@ public class ProductoData extends EntityData<Producto> {
 		LinkedList<Producto> productos = new LinkedList<Producto>();
 		
 		try {
-			this.rs = this.getStmt("SELECT ID_Producto, Nombre, Descripcion, Precio, Stock, EnvioIncluido FROM " + this.tableName).executeQuery();
+			this.rs = this.getStmt("SELECT ID_Producto, Nombre, Descripcion, Precio, Stock, EnvioIncluido, DisabledOn, DisabledDate, DisabledTime FROM " + this.tableName).executeQuery();
 			
 			if (this.rs != null) {
 				while (rs.next()) {
@@ -29,6 +30,9 @@ public class ProductoData extends EntityData<Producto> {
 					this.entity.setPrecio(rs.getDouble("Precio"));
 					this.entity.setStock(rs.getInt("Stock"));
 					this.entity.setEnvioIncluido(rs.getBoolean("EnvioIncluido"));
+					this.entity.setDisabledOn(rs.getObject("DisabledOn", LocalDateTime.class));
+					this.entity.setDisabledDate(rs.getObject("DisabledDate", LocalDate.class));
+					this.entity.setDisabledTime(rs.getObject("disabledTime", LocalTime.class));
 					
 					productos.add(this.entity);
 				}
@@ -47,7 +51,7 @@ public class ProductoData extends EntityData<Producto> {
 	public Producto getByID(int id) {
 		
 		try {
-			this.getStmt("SELECT ID_Producto, Nombre, Descripcion, Precio, Stock, EnvioIncluido FROM " + this.tableName + " WHERE ID_Producto =?")
+			this.getStmt("SELECT ID_Producto, Nombre, Descripcion, Precio, Stock, EnvioIncluido, DisabledOn, DisabledDate, DisabledTime FROM " + this.tableName + " WHERE ID_Producto =?")
 				.setInt(1, id);
 			this.rs = this.stmt.executeQuery();
 			
@@ -59,6 +63,9 @@ public class ProductoData extends EntityData<Producto> {
 				this.entity.setPrecio(rs.getDouble("Precio"));
 				this.entity.setStock(rs.getInt("Stock"));
 				this.entity.setEnvioIncluido(rs.getBoolean("EnvioIncluido"));
+				this.entity.setDisabledOn(rs.getObject("DisabledOn", LocalDateTime.class));
+				this.entity.setDisabledDate(rs.getObject("DisabledDate", LocalDate.class));
+				this.entity.setDisabledTime(rs.getObject("disabledTime", LocalTime.class));
 			}
 		}
 		catch (SQLException ex) {
@@ -125,6 +132,25 @@ public class ProductoData extends EntityData<Producto> {
 		try {
 			this.getStmt("DELETE FROM " + this.tableName + " WHERE ID_Producto =?");
 			this.stmt.setInt(1, id);
+			this.stmt.executeUpdate();
+		}
+		catch (SQLException ex) {
+			ex.printStackTrace();
+		}
+		finally {
+			this.closeConnection();
+		}
+	}
+	
+	public void desactivarProducto(Producto productoDesactivado) {
+		
+		try {
+			this.getStmt("UPDATE " + this.tableName + " SET DisabledOn=?, DisabledDate=?, DisabledTime=? WHERE ID_Producto=?");
+			this.stmt.setTimestamp(1, java.sql.Timestamp.valueOf(productoDesactivado.getDisabledOn()));
+			this.stmt.setDate(2, java.sql.Date.valueOf(productoDesactivado.getDisabledDate()));
+			this.stmt.setTime(3, java.sql.Time.valueOf(productoDesactivado.getDisabledTime()));
+			this.stmt.setInt(4, productoDesactivado.getID());
+			
 			this.stmt.executeUpdate();
 		}
 		catch (SQLException ex) {

@@ -1,5 +1,8 @@
 package entities;
 
+import java.time.*;
+
+
 public class Producto {
 	
 	private int ID;
@@ -8,6 +11,9 @@ public class Producto {
 	private double Precio;
 	private int Stock;
 	private Boolean EnvioIncluido;
+	private LocalDateTime DisabledOn;
+	private LocalDate DisabledDate;
+	private LocalTime DisabledTime;
 	
 	public int getID() {
 		return ID;
@@ -52,8 +58,36 @@ public class Producto {
 	
 	@Override
 	public String toString() {
-		String mensaje = "Producto " + this.ID + ": " + this.Nombre + ", " + this.Descripcion + ", Precio: $" + this.Precio +", Cantidad en stock: "+ this.Stock + " unidades, " + this.EvaluarEnvio() + ".";
+		String mensaje = "Producto " + this.ID + ": " + this.Nombre + ", " + this.Descripcion + ", Precio: $" + this.Precio +", Cantidad en stock: "+ this.Stock + " unidades, " + this.EvaluarEnvio() + this.ObtenerDesactivacion() + ".";
 		return mensaje;
 	}
 	
+	public LocalDateTime getDisabledOn() {
+		return DisabledOn;
+	}
+	public void setDisabledOn(LocalDateTime disabledOn) {
+		DisabledOn = disabledOn;
+	}
+	public LocalDate getDisabledDate() {
+		return DisabledDate;
+	}
+	public void setDisabledDate(LocalDate disabledDate) {
+		DisabledDate = disabledDate;
+	}
+	public LocalTime getDisabledTime() {
+		return DisabledTime;
+	}
+	public void setDisabledTime(LocalTime disabledTime) {
+		DisabledTime = disabledTime;
+	}
+	
+	private String ObtenerDesactivacion() {
+		
+		if (this.DisabledOn != null) {
+			return ", Desactivado (" + this.DisabledOn + "), Fecha: " + this.DisabledDate + ", Hora: " + this.DisabledTime;
+		}
+		else {
+			return "";
+		}
+	}
 }
