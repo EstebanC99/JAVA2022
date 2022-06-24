@@ -178,6 +178,7 @@ public class DataPersona {
 			stmt.setString(6, per.getPassword());
 			stmt.setString(7, per.getTel());
 			stmt.setBoolean(8, per.isHabilitado());
+			stmt.setInt(9, per.getId());
 			stmt.executeUpdate();
 		} catch (SQLException e) {
             e.printStackTrace();
@@ -197,9 +198,25 @@ public class DataPersona {
 		try {
 			stmt=DbConnector.getInstancia().getConn().
 					prepareStatement(
-							"delete from rol_persona where id_persona=?; delete from persona where id=?");
+							"delete from rol_persona where id_persona=?");
 			stmt.setInt(1, per.getId());
-			stmt.setInt(2, per.getId());
+			stmt.executeUpdate();
+		} catch (SQLException e) {
+            e.printStackTrace();
+		} finally {
+            try {
+                if(stmt!=null)stmt.close();
+                DbConnector.getInstancia().releaseConn();
+            } catch (SQLException e) {
+            	e.printStackTrace();
+            }
+		}
+		
+		try {
+			stmt=DbConnector.getInstancia().getConn().
+					prepareStatement(
+							"delete from persona where id=?");
+			stmt.setInt(1, per.getId());
 			stmt.executeUpdate();
 		} catch (SQLException e) {
             e.printStackTrace();

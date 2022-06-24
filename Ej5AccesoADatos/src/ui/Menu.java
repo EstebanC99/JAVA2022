@@ -144,49 +144,37 @@ public class Menu {
 	}
 
 	private Persona edit() {
-		Persona p = new Persona();
-		Documento d = new Documento();
+		Persona p = find();
 		
-		System.out.println("Ingrese el Numero de Documento: ");
-		d.setNro(s.nextLine());
-		System.out.println("Ingrese el Tipo de Documento: ");
-		d.setTipo(s.nextLine());
+		System.out.println(p);
 		
-		System.out.println(ctrlLogin.getByDocumento(p));
-		
-		System.out.println();
-		
-		solicitarDatos(p,d);
+		solicitarDatos(p,p.getDocumento());
 		
 		System.out.println();
 		
 		String respuesta;
-		System.out.print("¿Desea modificar los roles? (S o N): ");
-		respuesta = s.nextLine();
-		
-		if (respuesta.equalsIgnoreCase("S")) {
-			Rol r = new Rol();
-			do {
-				System.out.print("¿Desea modificar un rol? (S o N): ");
-				
-				if (respuesta.equalsIgnoreCase("S")) {
-					System.out.print("Eliminar (E) - Agregar (A)");
-					switch (s.nextLine().toUpperCase()){
-						case "E":
-							System.out.print("Seleccione el rol: ");
-							r.setId(Integer.parseInt(s.nextLine()));
-							p.removeRol(rolLogic.getByID(r));
-							break;
-						case "A":
-							System.out.println(rolLogic.getAll());
-							System.out.print("Elija el rol: ");
-							r.setId(Integer.parseInt(s.nextLine()));
-							p.addRol(rolLogic.getByID(r));
-							break;
-					}
+		Rol r = new Rol();
+		do {
+			System.out.print("¿Desea modificar algun rol? (S o N): ");
+			respuesta = s.nextLine();
+			
+			if (respuesta.equalsIgnoreCase("S")) {
+				System.out.print("Eliminar (E) - Agregar (A)");
+				switch (s.nextLine().toUpperCase()){
+					case "E":
+						System.out.print("Seleccione el rol: ");
+						r.setId(Integer.parseInt(s.nextLine()));
+						p.removeRol(rolLogic.getByID(r));
+						break;
+					case "A":
+						System.out.println(rolLogic.getAll());
+						System.out.print("Elija el rol: ");
+						r.setId(Integer.parseInt(s.nextLine()));
+						p.addRol(rolLogic.getByID(r));
+						break;
 				}
-			} while(respuesta.equalsIgnoreCase("S"));
-		}
+			}
+		} while(respuesta.equalsIgnoreCase("S"));
 		
 		EditarPersonaLogic editarPersonaLogic = new EditarPersonaLogic();
 		editarPersonaLogic.edit(p);
@@ -200,6 +188,8 @@ public class Menu {
 		
 		EliminarPersonaLogic eliminarLogic = new EliminarPersonaLogic();
 		
+		System.out.println(p);
+		System.out.println();
 		System.out.println("¿Seguro desea eliminar? (S o N)");
 		
 		if (s.nextLine().equalsIgnoreCase("S")) {
