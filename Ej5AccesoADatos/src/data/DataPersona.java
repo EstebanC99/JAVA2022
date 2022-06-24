@@ -161,7 +161,58 @@ public class DataPersona {
 		return pers;
 		
 	}
-
+	
+	public void update(Persona per) {
+		
+		PreparedStatement stmt= null;
+		try {
+			stmt=DbConnector.getInstancia().getConn().
+					prepareStatement(
+							"update persona set nombre=?, apellido=?, tipo_doc=?, nro_doc=?, email=?, password=?, tel=?, habilitado=?"
+							+ " where id=?");
+			stmt.setString(1, per.getNombre());
+			stmt.setString(2, per.getApellido());
+			stmt.setString(3, per.getDocumento().getTipo());
+			stmt.setString(4, per.getDocumento().getNro());
+			stmt.setString(5, per.getEmail());
+			stmt.setString(6, per.getPassword());
+			stmt.setString(7, per.getTel());
+			stmt.setBoolean(8, per.isHabilitado());
+			stmt.executeUpdate();
+		} catch (SQLException e) {
+            e.printStackTrace();
+		} finally {
+            try {
+                if(stmt!=null)stmt.close();
+                DbConnector.getInstancia().releaseConn();
+            } catch (SQLException e) {
+            	e.printStackTrace();
+            }
+		}
+	}
+	
+	public void delete(Persona per) {
+		PreparedStatement stmt= null;
+		
+		try {
+			stmt=DbConnector.getInstancia().getConn().
+					prepareStatement(
+							"delete from rol_persona where id_persona=?; delete from persona where id=?");
+			stmt.setInt(1, per.getId());
+			stmt.setInt(2, per.getId());
+			stmt.executeUpdate();
+		} catch (SQLException e) {
+            e.printStackTrace();
+		} finally {
+            try {
+                if(stmt!=null)stmt.close();
+                DbConnector.getInstancia().releaseConn();
+            } catch (SQLException e) {
+            	e.printStackTrace();
+            }
+		}
+	}
+	
 	private LinkedList<Persona> mapResult(ResultSet rs) throws SQLException{
 		
 		DataRol dr=new DataRol();

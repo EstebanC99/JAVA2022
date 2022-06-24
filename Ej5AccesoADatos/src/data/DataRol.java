@@ -214,26 +214,60 @@ public class DataRol {
 	public void saveRoles(Persona per) {
 		PreparedStatement stmt= null;
 		
+		Persona personaPersistida = new Persona();
+		personaPersistida.setId(per.getId());
+		setRoles(personaPersistida);
+		
 		for (Integer rolID : per.getRolesIDs()) {
-			try {
-				stmt=DbConnector.getInstancia().getConn().
-						prepareStatement(
-								"insert into rol_persona(id_persona, id_rol) values(?,?)",
-								PreparedStatement.RETURN_GENERATED_KEYS
-								);
-				stmt.setInt(1, per.getId());
-				stmt.setInt(2, rolID);
-				stmt.executeUpdate();
+			
+			Rol r = new Rol();
+			r.setId(rolID);
+			
+			if (!personaPersistida.hasRol(r)) {
+				try {
+					stmt=DbConnector.getInstancia().getConn().
+							prepareStatement(
+									"insert into rol_persona(id_persona, id_rol) values(?,?)",
+									PreparedStatement.RETURN_GENERATED_KEYS
+									);
+					stmt.setInt(1, per.getId());
+					stmt.setInt(2, rolID);
+					stmt.executeUpdate();
+					
+				} catch (SQLException e) {
+		            e.printStackTrace();
+				} finally {
+		            try {
+		                if(stmt!=null)stmt.close();
+		                DbConnector.getInstancia().releaseConn();
+		            } catch (SQLException e) {
+		            	e.printStackTrace();
+		            }
+				}
+			}
+		}
+		
+		for (Integer rolToDelete : personaPersistida.getRolesIDs()) {
+			
+			if (!per.getRolesIDs().contains(rolToDelete)) {
 				
-			} catch (SQLException e) {
-	            e.printStackTrace();
-			} finally {
-	            try {
-	                if(stmt!=null)stmt.close();
-	                DbConnector.getInstancia().releaseConn();
-	            } catch (SQLException e) {
-	            	e.printStackTrace();
-	            }
+				try {
+					stmt=DbConnector.getInstancia().getConn().
+							prepareStatement(
+									"delete from rol_persona where id_persona=? and id_rol=?");
+					stmt.setInt(1, per.getId());
+					stmt.setInt(2, rolToDelete);
+					stmt.executeUpdate();
+				} catch (SQLException e) {
+		            e.printStackTrace();
+				} finally {
+		            try {
+		                if(stmt!=null)stmt.close();
+		                DbConnector.getInstancia().releaseConn();
+		            } catch (SQLException e) {
+		            	e.printStackTrace();
+		            }
+				}
 			}
 		}
 	}

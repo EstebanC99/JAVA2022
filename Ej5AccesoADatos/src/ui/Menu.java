@@ -7,6 +7,9 @@ import java.util.Scanner;
 import entities.*;
 import logic.Login;
 import logic.RolLogic;
+import logic.AgregarPersonaLogic;
+import logic.EditarPersonaLogic;
+import logic.EliminarPersonaLogic;
 
 public class Menu {
 	Scanner s=null;
@@ -45,10 +48,10 @@ public class Menu {
 			System.out.println(add());
 			break;
 		case "edit":
-			
+			System.out.println(edit());
 			break;
 		case "delete":
-			
+			delete();
 			break;
 		default:
 			break;
@@ -112,26 +115,9 @@ public class Menu {
 		Persona p = new Persona();
 		Documento d = new Documento();
 		Rol r = new Rol();
+		AgregarPersonaLogic agregarPersonaLogic = new AgregarPersonaLogic();
 		
-		System.out.print("Ingrese Nombre: ");
-		p.setNombre(s.nextLine());
-		System.out.print("Ingrese Apellido: ");
-		p.setApellido(s.nextLine());
-		System.out.print("Ingrese Numero de Documento: ");
-		d.setNro(s.nextLine());
-		System.out.print("Ingrese Tipo de Documento: ");
-		d.setTipo(s.nextLine());
-		
-		p.setDocumento(d);
-		
-		System.out.print("Ingrese Email: ");
-		p.setEmail(s.nextLine());
-		System.out.print("Ingrese Password: ");
-		p.setPassword(s.nextLine());
-		System.out.print("Ingrese Nro de Telefono: ");
-		p.setTel(s.nextLine());
-		System.out.print("¿Esta habilitado? (S o N): ");
-		p.setHabilitado(s.nextLine().equalsIgnoreCase("S"));
+		solicitarDatos(p,d);
 		
 		System.out.println();
 		
@@ -152,9 +138,102 @@ public class Menu {
 			}
 		}while (respuesta.equalsIgnoreCase("S"));
 		
-		ctrlLogin.add(p);
-		rolLogic.saveRoles(p);
+		agregarPersonaLogic.addPersona(p);
 		
 		return p;
 	}
+
+	private Persona edit() {
+		Persona p = new Persona();
+		Documento d = new Documento();
+		
+		System.out.println("Ingrese el Numero de Documento: ");
+		d.setNro(s.nextLine());
+		System.out.println("Ingrese el Tipo de Documento: ");
+		d.setTipo(s.nextLine());
+		
+		System.out.println(ctrlLogin.getByDocumento(p));
+		
+		System.out.println();
+		
+		solicitarDatos(p,d);
+		
+		System.out.println();
+		
+		String respuesta;
+		System.out.print("¿Desea modificar los roles? (S o N): ");
+		respuesta = s.nextLine();
+		
+		if (respuesta.equalsIgnoreCase("S")) {
+			Rol r = new Rol();
+			do {
+				System.out.print("¿Desea modificar un rol? (S o N): ");
+				
+				if (respuesta.equalsIgnoreCase("S")) {
+					System.out.print("Eliminar (E) - Agregar (A)");
+					switch (s.nextLine().toUpperCase()){
+						case "E":
+							System.out.print("Seleccione el rol: ");
+							r.setId(Integer.parseInt(s.nextLine()));
+							p.removeRol(rolLogic.getByID(r));
+							break;
+						case "A":
+							System.out.println(rolLogic.getAll());
+							System.out.print("Elija el rol: ");
+							r.setId(Integer.parseInt(s.nextLine()));
+							p.addRol(rolLogic.getByID(r));
+							break;
+					}
+				}
+			} while(respuesta.equalsIgnoreCase("S"));
+		}
+		
+		EditarPersonaLogic editarPersonaLogic = new EditarPersonaLogic();
+		editarPersonaLogic.edit(p);
+		
+		return p;
+	}
+	
+	private void delete() {
+		
+		Persona p = find();
+		
+		EliminarPersonaLogic eliminarLogic = new EliminarPersonaLogic();
+		
+		System.out.println("¿Seguro desea eliminar? (S o N)");
+		
+		if (s.nextLine().equalsIgnoreCase("S")) {
+			eliminarLogic.delete(p);
+			System.out.println("Se elimino correctamente");
+		} else {
+			System.out.println("Eliminacion cancelada");
+			System.out.println();
+		}
+		
+		System.out.println(ctrlLogin.getAll());
+	}
+	
+	private void solicitarDatos(Persona p, Documento d) {
+		System.out.print("Ingrese Nombre: ");
+		p.setNombre(s.nextLine());
+		System.out.print("Ingrese Apellido: ");
+		p.setApellido(s.nextLine());
+		System.out.print("Ingrese Numero de Documento: ");
+		d.setNro(s.nextLine());
+		System.out.print("Ingrese Tipo de Documento: ");
+		d.setTipo(s.nextLine());
+		
+		p.setDocumento(d);
+		
+		System.out.print("Ingrese Email: ");
+		p.setEmail(s.nextLine());
+		System.out.print("Ingrese Password: ");
+		p.setPassword(s.nextLine());
+		System.out.print("Ingrese Nro de Telefono: ");
+		p.setTel(s.nextLine());
+		System.out.print("¿Esta habilitado? (S o N): ");
+		p.setHabilitado(s.nextLine().equalsIgnoreCase("S"));
+		
+	}
+	
 }
